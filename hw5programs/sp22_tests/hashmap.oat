@@ -1,0 +1,131 @@
+global p = 31;
+global size = 32;
+global deleted_sp = new HashEntry{key=""; value=""};
+global hash_table = new HashEntry?[]{};
+
+struct HashEntry {
+    string key;
+    string value
+}
+
+int wrap(int i) {
+    return i [&] (size - 1);
+}
+
+int hash_function(string s) {
+    var arr = array_of_string(s);
+    var hash = 0;
+    var poly = 1;
+    for (var i = 0; i < length(arr); i = i + 1;) {
+        hash = hash + arr[i] * poly;
+        poly = poly * p;
+    }
+    return wrap(hash);
+}
+
+bool string_eq(string s1, string s2) {
+    var len = length_of_string(s1);
+    if (len != length_of_string(s2)) {
+        return false;
+    }
+    var arr1 = array_of_string(s1);
+    var arr2 = array_of_string(s2);
+    for (var i = 0; i < len; i = i + 1;) {
+        if (arr1[i] != arr2[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool put(string key, string value) {
+    var hash = hash_function(key);
+    for (var probe = 0; probe < size; probe = probe + 1;) {
+        var cur = wrap(hash + probe);
+        if? (HashEntry sc = hash_table[cur]) {
+            if (sc == deleted_sp | string_eq(sc.key, key)) {
+                hash_table[cur] = new HashEntry{key=key; value=value};
+                return true;
+            }
+        } else {
+            hash_table[cur] = new HashEntry{key=key; value=value};
+            return true;
+        }
+    }
+    return false;
+}
+
+string? get(string key) {
+    var hash = hash_function(key);
+    for (var probe = 0; probe < size; probe = probe + 1;) {
+        var cur = wrap(hash + probe);
+        if? (HashEntry sc = hash_table[cur]) {
+            if (sc != deleted_sp & string_eq(sc.key, key)) {
+                return sc.value;
+            }
+        } else {
+            return string null;
+        }
+    }
+    return string null;
+}
+
+bool remove(string key) {
+    var hash = hash_function(key);
+    for (var probe = 0; probe < size; probe = probe + 1;) {
+        var cur = wrap(hash + probe);
+        if? (HashEntry sc = hash_table[cur]) {
+            if (sc != deleted_sp & string_eq(sc.key, key)) {
+                hash_table[cur] = deleted_sp;
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+    return false;
+}
+
+int program (int argc, string[] argv) {
+    hash_table = new HashEntry?[size];
+    if (!put("course", "cis341")) {
+        return 1;
+    }
+    if (!put("student", "munyam & hanbang")) {
+        return 1;
+    }
+    if?(string s = get("student")) {
+        if (!string_eq(s, "munyam & hanbang")) {
+            return 1;
+        }
+    } else {
+        return 1;
+    }
+    if?(string s = get("course")) {
+        if (!string_eq(s, "cis341")) {
+            return 1;
+        }
+    } else {
+        return 1;
+    }
+    if?(string s = get("prof")) {
+        return 1;
+    }
+    if (remove("prof")) {
+        return 1;
+    }
+    if (!remove("course")) {
+        return 1;
+    }
+    if?(string s = get("course")) {
+        return 1;
+    }
+    if?(string s = get("student")) {
+        if (!string_eq(s, "munyam & hanbang")) {
+            return 1;
+        }
+    } else {
+        return 1;
+    }
+    return 0;
+}

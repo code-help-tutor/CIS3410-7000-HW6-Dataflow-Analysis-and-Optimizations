@@ -1,0 +1,69 @@
+int[] sort(int[] arr, int len)
+{
+    var copy = new int[len];
+    for (var i = 0; i < len; i = i + 1;) {
+        copy[i] = arr[i]; 
+    }
+
+    for (var i = 1; i < len; i = i + 1;) {
+        var key = copy[i];
+        var j = (i - 1);
+
+        var inwhile = j >= 0 & copy[j] > key;
+        while (inwhile) {
+            copy[j + 1] = copy[j]; 
+            j = j - 1;
+            if (j < 0) {
+                inwhile = false;
+            } else {
+                if (copy[j] <= key) {
+                    inwhile = false;
+                }
+            }
+        }
+
+        copy[j + 1] = key;
+    }
+
+    return copy;
+}
+
+bool checksorted(int[] arr, int len) {
+    if (len == 1) {
+        return true; 
+    }
+    for (var i = 0; i < (len - 1); i = i + 1;)
+    {
+        if (arr[i+1] < arr[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/* for debugging */
+void print_arr(int[] sorted, int len)
+{
+    print_string("\nDescending sorted array[");
+    for (var i = 0; i < len; i = i + 1;)
+    {
+        print_int(sorted[i]);
+        if (i < len - 1) {
+            print_string(",");
+        }
+    }
+    print_string("]\n\n");
+    return;
+}
+
+int program (int argc, string[] argv) {
+    var arr = new int[]{ 12, 11, 13, 5, 6 };
+    var len = length(arr); 
+    var sorted = sort(arr, len); 
+    
+    if (checksorted(sorted, len)) {
+        return 0;
+    }
+
+    return 1; 
+}

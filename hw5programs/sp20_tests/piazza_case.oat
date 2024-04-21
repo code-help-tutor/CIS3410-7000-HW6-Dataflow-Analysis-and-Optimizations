@@ -1,0 +1,30 @@
+struct Account {
+	   string name;
+	   int balance;
+}
+
+global chk = new Account{name="checking";balance=0};
+global credit = new Account{name="credit";balance=0};
+
+void update_balance(string acct_name, int transxn_amt) {
+	 if (acct_name = "checking") {
+	 	 chk.balance = chk.balance + transxn_amt;
+		 } else if (acct_name = "credit") {
+		   credit.balance = credit.balance + transxn_amt;
+		   } else {
+		   	 return;
+	}
+	return;
+}
+
+
+int program (int argc, string[] argv) {
+	print_string("Initial balance: ");
+	print_int (chk.balance);
+	print_string("\n");
+	update_balance("checking", 100);
+	print_string("New balance after $100 deposit: ");
+	print_int (chk.balance);
+	print_string("\n");
+	return 0;
+}

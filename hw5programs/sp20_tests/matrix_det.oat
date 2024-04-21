@@ -1,0 +1,27 @@
+struct Row {
+  int a;
+  int b;
+  int c
+}
+
+global x = Row[] {Row {a = 1; b = 4; c = 2},  Row {a = 5; b = 1; c = 1}, Row {a = 2; b = 2; c = 2}};
+
+int program(int argc, string[] argv) {
+  var bc = x[1].b * x[2].c;
+  var cb = x[2].b * x[1].c;
+  var bccb = bc - cb;
+  var r1 = x[0].a * bccb;
+
+  var ac = x[2].a * x[1].c;
+  var ca = x[1].a * x[2].c;
+  var acca = ac - ca;
+  var r2 = x[0].b * acca;
+
+  var ab = x[1].a * x[2].b;
+  var ba = x[2].a * x[1].b;
+  var abba = ab - ba;
+  var r3 = x[0].c * abba;
+
+  var temp = r1 + r2;
+  return temp + r3
+}

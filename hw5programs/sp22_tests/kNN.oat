@@ -1,0 +1,164 @@
+struct List {
+    Node? head;
+    int size
+}
+
+struct Node {
+    Node? next;
+    Point p;
+    int index
+}
+
+struct Point {
+    int x;
+    int y
+}
+
+
+
+void insert(List l, Point p0) {
+    if?(Node head = l.head) {
+        var add = new Node {next = head; p = p0; index = l.size};
+        var cur = Node null;
+        for (var i = 0; i <= l.size; i = i+1;){
+            if (i == 0){
+                cur = head;
+            }
+            else {
+                if?(Node x = cur){
+                    if (i < l.size) {
+                        cur = x.next;
+                    } else {
+                        x.next = add;
+                    }
+                    
+                }
+            }
+        }
+        l.size = l.size + 1;
+        
+    } else {
+        var add = new Node {next = Node null; p = p0; index = 0};
+        l.head = add;
+        l.size = 1;
+    }
+    return;
+}
+
+Node? get (List l, int index){
+    var cur = l.head;
+    if (index >= l.size){
+        print_string ("Accessing an index of the list out of bounds!");
+        return (Node null);
+    }
+    for (var i = 1; i <= index; i = i+1;){
+        if?(Node x = cur){
+            cur = x.next;
+        }
+    }
+    return cur;
+    
+}
+
+List get_nearest_k_points (int[] arr, Point[] pts_list, int k)
+    {
+        var n = length(arr);
+        /*for (var i = 0; i < k; i = i+1;){
+            print_int (arr[i]);
+            print_string (" ");
+            print_point (pts_list[i]);
+            print_string ("\n");
+        }*/
+
+        for (var i = 0; i < n - 1; i = i + 1;){
+            for (var j = 0; j < n - i - 1; j = j + 1;){
+                if (arr[j] > arr[j + 1]) {
+                    var temp1 = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp1;
+
+                    var temp2 = pts_list[j];
+                    pts_list[j] = pts_list[j+1];
+                    pts_list[j+1] = temp2;
+
+                }
+            }
+        }
+
+        var nearest_k = new List {head = Node null; size = 0};
+        for (var i = 0; i < k; i = i+1;){
+            /*print_string ("Inserted ");
+            print_int (arr[i]);
+            print_string (" ");
+            print_point (pts_list[i]);
+            print_string ("\n");*/
+            insert(nearest_k, pts_list[i]);
+        }
+
+        return nearest_k;
+    }
+
+
+int euclidean_distance_metric (Point p1, Point p2) {
+    var dist = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+    return dist;
+}
+
+
+
+List get_k_nearest (Point p, (Point, Point) -> int distance_metric, Point[] pts_list, int k) {
+
+    var n = length(pts_list);
+    var dist_from_p_to_others = new int[n]; 
+    for (var i = 0; i < n; i = i + 1;){
+        dist_from_p_to_others[i] = distance_metric(p, pts_list[i]);
+        /*print_point(pts_list[i]);
+        print_int(dist_from_p_to_others[i]);
+        print_string(" ");*/
+    }
+    var new_pts_list = new Point[n]{x -> pts_list[x]};
+    return get_nearest_k_points(dist_from_p_to_others, new_pts_list, k);
+
+
+}
+
+void print_point (Point p){
+
+    print_string ("(");
+    print_int(p.x);
+    print_string (", ");
+    print_int(p.y);
+    print_string (")");
+    return;
+
+}
+
+int program(int argc, string[] argv) {
+    var k = 2;
+    var pts_list = new Point[]{new Point{x = 4; y = 5}, new Point{x = 2; y = 10}, new Point{x = 5; y = 10}, new Point{x = 2; y = -1}};
+    var num_of_points = length(pts_list);
+
+
+    var knn_graph = new List[num_of_points]{x -> new List{head = Node null; size = 0}};
+    for (var i = 0; i < num_of_points; i = i + 1;){
+        knn_graph[i] = get_k_nearest(pts_list[i], euclidean_distance_metric, pts_list, k+1);
+    }
+
+    for (var i = 0; i < num_of_points; i = i+1;){
+        print_string ("Nearest k = ");
+        print_int (k);
+        print_string(" points to ");
+        print_point (pts_list[i]);
+        print_string (": ");
+        for (var j = 1; j < knn_graph[i].size; j = j+1;){
+            if?(Node node = get (knn_graph[i], j)){
+                print_point (node.p);
+            }
+        }
+
+         print_string ("\n");   
+    }
+    return 0;
+
+
+}

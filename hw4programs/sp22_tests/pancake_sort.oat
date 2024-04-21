@@ -1,0 +1,51 @@
+void flip(int[] arr, int n) {
+    var top = 0;
+    var bottom = n - 1;
+
+    while (top < bottom) {
+        var top_val = arr[top];
+        arr[top] = arr[bottom];
+        arr[bottom] = top_val;
+        top = top + 1;
+        bottom = bottom - 1;
+    }
+    return;
+}
+
+int get_max_index(int[] arr, int n) {
+    var max_index = 0;
+    var max = 0;
+
+    for (var i = 0; i < n; i = i + 1;) {
+        if (arr[i] > max) {
+            max = arr[i];
+            max_index = i;
+        }
+    }
+    return max_index;
+}
+
+void pancake_sort(int[] arr, int len) {
+    var n = len;
+
+    while (n > 1) {
+        var max_index = get_max_index(arr, n);
+        flip(arr, max_index + 1);
+        flip(arr, n);
+        n = n - 1;
+    }
+    return;
+}
+
+
+int program(int argc, string[] argv) {
+    var arr = new int[]{111, 73, 18, 139, 64, 193, 212, 97, 4, 87, 46, 201, 27, 117, 82, 9, 258, 2, 65, 152};
+
+    pancake_sort(arr, 20);
+
+    for (var i = 0; i < 20; i = i + 1;) {
+        print_int(arr[i]);
+        print_string(" ");
+    }
+    return 0;
+}

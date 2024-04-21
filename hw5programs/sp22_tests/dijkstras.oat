@@ -1,0 +1,111 @@
+struct Graph {
+  AdjList?[] adj_lists
+}
+
+struct AdjList {
+  Edge[] edges
+}
+
+struct Edge {
+  int neighbor;
+  int weight
+}
+
+global e01 = new Edge { neighbor = 1; weight = 4 };
+global e07 = new Edge { neighbor = 7; weight = 8 };
+
+global e12 = new Edge { neighbor = 2; weight = 8 };
+global e17 = new Edge { neighbor = 7; weight = 11 };
+
+global e23 = new Edge { neighbor = 3; weight = 7 };
+global e25 = new Edge { neighbor = 5; weight = 4 };
+global e28 = new Edge { neighbor = 8; weight = 2 };
+
+global e34 = new Edge { neighbor = 4; weight = 9 };
+
+global e53 = new Edge { neighbor = 3; weight = 14 };
+global e54 = new Edge { neighbor = 4; weight = 10 };
+
+global e65 = new Edge { neighbor = 5; weight = 2 };
+global e68 = new Edge { neighbor = 8; weight = 6 };
+
+global e76 = new Edge { neighbor = 6; weight = 1 };
+global e78 = new Edge { neighbor = 8; weight = 7 };
+
+void print_int_array(int[] arr) {
+  for (var i = 0; i < length(arr); i = i + 1;) {
+    print_int(arr[i]);
+    print_string(" ");
+  }
+  return;
+}
+
+bool is_queue_empty(bool[] queued) {
+  for (var i = 0; i < length(queued); i = i + 1;) {
+    if (queued[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+int get_min_dist_node(bool[] queued, int[] dist) {
+  var curr_min = -1;
+  var curr_min_node = 0;
+  for (var i = 0; i < length(queued); i = i + 1;) {
+    if (queued[i]) {
+      var curr_dist = dist[i];
+      if (curr_dist != -1 & (curr_dist < curr_min | curr_min == -1)) {
+        curr_min = curr_dist;
+        curr_min_node = i;
+      }
+    }
+  }
+  return curr_min_node;
+}
+
+int[] dijkstras(Graph graph, int source) {
+  var n = length(graph.adj_lists);
+  var dist = new int[n]{id -> -1};
+  var queued = new bool[n]{id -> true};
+
+  dist[source] = 0;
+
+  while (!is_queue_empty(queued)) {
+    var curr = get_min_dist_node(queued, dist);
+    queued[curr] = false;
+
+    if?(AdjList a = graph.adj_lists[curr]) {
+      var a_edges = a.edges;
+      for (var i = 0; i < length(a_edges); i = i + 1;) {
+        var curr_edge = a_edges[i];
+        var curr_neighbor = curr_edge.neighbor;
+        var alt_dist = dist[curr] + curr_edge.weight;
+        if (dist[curr_neighbor] == -1 | alt_dist < dist[curr_neighbor]) {
+          dist[curr_neighbor] = alt_dist;
+        }
+      }
+    }
+  }
+
+  return dist;
+}
+
+int program (int argc, string[] argv) {
+  var a0 = new AdjList { edges = new Edge[]{e01, e07} };
+  var a1 = new AdjList { edges = new Edge[]{e12, e17} };
+  var a2 = new AdjList { edges = new Edge[]{e23, e25, e28} };
+  var a3 = new AdjList { edges = new Edge[]{e34} };
+  var a4 = AdjList null;
+  var a5 = new AdjList { edges = new Edge[]{e53, e54} };
+  var a6 = new AdjList { edges = new Edge[]{e65, e68} };
+  var a7 = new AdjList { edges = new Edge[]{e76, e78} };
+  var a8 = AdjList null;
+
+  var graph = new Graph { adj_lists = new AdjList?[]{a0, a1, a2, a3, a4, a5, a6, a7, a8} };
+  
+  var result = dijkstras(graph, 0);
+  print_int_array(result);
+
+  return 0;
+}

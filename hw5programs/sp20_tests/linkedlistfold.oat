@@ -1,0 +1,35 @@
+struct Node {
+  int val;
+  Node? next
+}
+
+int fold_left ((int, Node) -> int f, int acc, Node? head) {
+  if?(Node n = head) {
+    return fold_left(f, f(acc, n), n.next);
+  } else {
+    return acc;
+  }
+}
+
+int sum (int acc, Node x) {
+  return acc + x.val;
+}
+
+Node? transform (int idx, int[] arr) {
+  if (idx >= length(arr)) {
+    return Node null;
+  }
+
+  var nd = new Node {
+    val = arr[idx];
+    next = transform(idx + 1, arr)
+  };
+
+  return nd;
+}
+
+int program (int argc, string[] argv) {
+  var initial = new int[5]{i -> i * i};
+  var list = transform(0, initial);
+  return fold_left(sum, 0, list);
+}

@@ -1,0 +1,108 @@
+struct Graph {
+  AdjList?[] adj_lists
+}
+
+struct AdjList {
+  Edge[] edges
+}
+
+struct Edge {
+  int neighbor;
+  int weight;
+  bool neg
+}
+
+global e01 = new Edge { neighbor = 1; weight = 5; neg = true };
+global e02 = new Edge { neighbor = 2; weight = 10; neg = false };
+global e04 = new Edge { neighbor = 4; weight = 0; neg = false };
+global e07 = new Edge { neighbor = 7; weight = 51; neg = false};
+
+global e12 = new Edge { neighbor = 2; weight = 12; neg = false  };
+
+global e23 = new Edge { neighbor = 3; weight = 3; neg = true };
+
+global e34 = new Edge { neighbor = 4; weight = 5; neg = false  };
+global e36 = new Edge { neighbor = 6; weight = 50; neg = false  };
+
+global e40 = new Edge {neighbor = 0; weight = 1; neg = true };
+global e45 = new Edge { neighbor = 5; weight = 100; neg = false  };
+
+global e78 = new Edge { neighbor = 8; weight = 10; neg = false  };
+global e710 = new Edge { neighbor = 10; weight = 5; neg = true};
+
+global e89 = new Edge { neighbor = 9; weight = 3; neg = false  };
+
+global e97 = new Edge { neighbor = 7; weight = 12; neg = false };
+global e910 = new Edge { neighbor = 10; weight = 2; neg = true };
+
+global e100 = new Edge {neighbor = 0; weight = 79; neg = false };
+
+void print_int_array(int[][] arr) {
+  for (var i = 0; i < length(arr); i = i + 1;) {
+      for (var j = 0; j < length(arr[i]); j = j + 1;) {
+          print_int(arr[i][j]);
+          print_string(" ");
+      }
+  }
+  return;
+}
+
+int[][] floyd_warshall(Graph graph) {
+  var n = length(graph.adj_lists);
+  var dist = new int[][n]{i -> new int[n]{j -> 999}};
+  
+  for (var i = 0; i < n; i = i+1;) {
+      dist[i][i] = 0;
+  }
+
+    for (var i = 0; i < n; i = i + 1;) {
+      if?(AdjList v = graph.adj_lists[i]) {
+          var v_edges = v.edges; 
+          for (var j = 0; j < length(v_edges); j = j + 1;) {
+              var nbr = v_edges[j].neighbor;
+              var weight = v_edges[j].weight;
+              var negative = v_edges[j].neg;
+              if (negative) {
+                  weight = 0 - weight;
+              }
+              dist[i][nbr] = weight;
+          }
+      }
+    }
+    
+    for (var k = 0; k < n; k = k + 1;) {
+        for (var i = 0; i < n; i = i + 1;) {
+            for (var j = 0; j < n; j = j + 1;) {
+                if (dist[i][k] < 999 & (dist[k][j] < 999)) {
+                    if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+    }
+  return dist;
+}
+
+int program (int argc, string[] argv) {
+  var a0 = new AdjList { edges = new Edge[]{e01, e02, e04, e07} };
+  var a1 = new AdjList { edges = new Edge[]{e12} };
+  var a2 = new AdjList { edges = new Edge[]{e23} };
+  var a3 = new AdjList { edges = new Edge[]{e34, e36} };
+  var a4 = new AdjList { edges = new Edge[]{e45, e40} };
+  var a5 = AdjList null;
+  var a6 = AdjList null;
+  var a7 = new AdjList { edges = new Edge[]{e78, e710} };
+  var a8 = new AdjList { edges = new Edge[]{e89} };
+  var a9 = new AdjList { edges = new Edge[]{e910, e97} };
+  var a10 = new AdjList {edges = new Edge[]{e100} };
+
+  var graph = new Graph { adj_lists = new AdjList?[]{a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10} };
+  
+  var result = floyd_warshall(graph)[0];
+  for (var i = 0; i < 10; i = i + 1;) {
+      print_int(result[i]);
+      print_string(" ");
+  }
+  return 0;
+}

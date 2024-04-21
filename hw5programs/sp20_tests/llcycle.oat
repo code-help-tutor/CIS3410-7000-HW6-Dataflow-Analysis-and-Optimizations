@@ -1,0 +1,55 @@
+/* Invariant that Nodes must have unique values */
+struct Node {
+    int v;
+    Node? nxt
+}
+
+bool hasCycle(Node n) {
+  if? (Node nNext = n.nxt) {
+    var slow = n;
+    var fast = nNext;
+    while (slow.v != fast.v) {
+      if? (Node i1 = fast.nxt) {
+        slow = slow.nxt;
+        fast = fast.nxt.nxt; 
+      } else {
+        return false;
+      }
+    }
+  } else {
+    return false;
+  }
+  return true;
+}
+
+int program(int argc, string[] argv) {
+    /* acyclic */
+    var n1 = new Node {v = 1; nxt=Node null};
+    var n2 = new Node {v = 2; nxt=n1};
+    var n3 = new Node {v = 3; nxt=n2};
+    var n4 = new Node {v = 4; nxt=n3};
+    var n5 = new Node {v = 5; nxt=n4};
+    var n6 = new Node {v = 6; nxt=n5};
+    var n7 = new Node {v = 7; nxt=n6};
+    var n8 = new Node {v = 8; nxt=n7};
+
+    /* cyclic */
+    var n_1 = new Node {v = 1; nxt=Node null};
+    var n_2 = new Node {v = 2; nxt=n_1};
+    var n_3 = new Node {v = 3; nxt=n_2};
+    var n_4 = new Node {v = 4; nxt=n_3};
+    var n_5 = new Node {v = 5; nxt=n_4};
+    var n_6 = new Node {v = 6; nxt=n_5};
+    var n_7 = new Node {v = 7; nxt=n_6};
+    var n_8 = new Node {v = 8; nxt=n_7};
+    n_1.nxt = n_8;
+
+    print_string("Expected: false, Actual: ");
+    print_bool (hasCycle(n8));
+    print_string(" ");
+    print_string("Expected: true, Actual: ");
+    print_bool (hasCycle(n_8));
+
+    return 0;
+}
+

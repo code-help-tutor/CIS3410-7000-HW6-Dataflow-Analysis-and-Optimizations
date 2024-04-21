@@ -1,0 +1,48 @@
+struct Node {
+  int v;
+  Node? next
+}
+
+bool linked_list_has_duplicates (Node? n) {
+  var first = n;
+  var notdone = true;
+  while (notdone) {
+    if? (Node n1 = first) {
+      var value = n1.v;
+      var next = n1.next;
+      var cond = true;
+      while (cond) {
+        if? (Node n2 = next) {
+          var cnv = n2.v;
+          if (value == cnv) {
+            return true;
+          }
+          next = n2.next;
+        } else {
+          cond = false;
+        }
+      }
+      first = n1.next;
+    } else {
+      notdone = false;
+    }
+  }
+  return false;
+}
+
+int main () {
+  var e = new Node {v = 5; next = Node null};
+  var d = new Node {v = 4; next = e};
+  var c = new Node {v = 3; next = d};
+  var b = new Node {v = 2; next = c};
+  var a = new Node {v = 1; next = b};
+  var result1 = linked_list_has_duplicates(a);
+
+  e.v = 4;
+  var result2 = linked_list_has_duplicates(a);
+
+  if (!result1 & result2) {
+    return 0;
+  }
+  return -1;
+}

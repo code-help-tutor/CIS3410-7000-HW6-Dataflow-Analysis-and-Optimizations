@@ -1,0 +1,76 @@
+struct Node {
+ int val;
+ Node? left;
+   Node? right
+}
+
+struct Tuple {
+ int max_sum_path;
+ int max_path_term_node
+}
+
+Node newNode (int val) {
+ return new Node {val = val; left = Node null; right = Node null};
+}
+
+int getMax(int a, int b) {
+ if(a >= b) {
+  return a;
+ }
+ return b;
+}
+
+Tuple findMaxSumHelper (Node? root, Tuple input_tuple) {
+ 
+ if?(Node x = root) {
+
+  var l_result = findMaxSumHelper(x.left, input_tuple).max_path_term_node;
+  var r_result = findMaxSumHelper(x.right, input_tuple).max_path_term_node;
+
+  var max_children = getMax(l_result, r_result);
+  var curr_root_terminating_path = getMax(max_children + x.val, x.val);
+
+  var max_no_parent = getMax(curr_root_terminating_path, x.val + l_result + r_result);
+
+  var res = getMax(input_tuple.max_sum_path, max_no_parent);
+
+  var ret_tuple = new Tuple {max_sum_path = res; max_path_term_node = curr_root_terminating_path};
+
+  return ret_tuple;
+
+ } else {
+  var ret = new Tuple {max_sum_path = input_tuple.max_sum_path; max_path_term_node = 0};
+  return ret;
+ }
+}
+
+
+int findMaxSumDriver(Node root) {
+ var input_tuple = new Tuple {max_sum_path = -99999; max_path_term_node = 0};
+ var temp = findMaxSumHelper(root, input_tuple);
+ return temp.max_sum_path;
+}
+
+int program(int argc, string[] argv) {
+ var root = newNode(8);
+ 
+ root.left = newNode(2);
+ root.right = newNode(70);
+
+
+ if?(Node r_l = root.left) {
+  r_l.left = newNode(50);
+  r_l.right = newNode(0);
+ }
+
+ if?(Node r_r = root.right) {
+  r_r.right = newNode(15);
+
+  if?(Node r_r_r = r_r.right) {
+   r_r_r.right = newNode(4);
+   r_r_r.left = newNode(-9);
+  }
+ }
+ 
+ return findMaxSumDriver(root);
+}

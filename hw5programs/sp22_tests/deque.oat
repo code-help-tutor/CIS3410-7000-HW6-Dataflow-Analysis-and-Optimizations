@@ -1,0 +1,112 @@
+struct Deque {
+    Node? head;
+    Node? tail
+}
+struct Node {
+    Node? prev;
+    Node? next;
+    int v
+}
+
+
+
+void enqueueLeft(Deque q, int k) {
+  var new_node = new Node {prev = Node null; next = Node null; v = k};
+  if?(Node h = q.head) {
+    new_node.next = q.head;
+    h.prev = new_node;
+    q.head = new_node;
+  } else {
+    q.head = new_node;
+    q.tail = new_node;
+  }
+  return;
+}
+void enqueueRight(Deque q, int k) {
+  var new_node = new Node {prev = Node null; next = Node null; v = k};
+  if?(Node t = q.tail) {
+    new_node.prev = q.tail;
+    t.next = new_node;
+    q.tail = new_node;
+  } else {
+    q.head = new_node;
+    q.tail = new_node;
+  }
+  return;
+}
+int dequeueRight(Deque q) {
+  if?(Node t = q.tail) {
+    q.tail = t.prev;
+    if?(Node p = t.prev) {
+      p.next = Node null;
+    } 
+    return t.v;
+  } else {
+    return -1;
+  }
+/*  return -1; */
+}
+int dequeueLeft(Deque q) {
+  if?(Node t = q.head) {
+    q.head = t.next;
+    if?(Node p = t.next) {
+      p.prev = Node null;
+    }
+    return t.v;
+  } else {
+    return -1;
+  }
+/*  return -1; */
+}
+int peakLeft(Deque q) {
+  if?(Node t = q.head) {
+    return t.v;
+  } else {
+    return -1;
+  }
+}
+
+int peakRight(Deque q) {
+  if?(Node t = q.tail) {
+    return t.v;
+  } else {
+    return -1;
+  }
+}
+
+bool isEmpty(Deque q) {
+  if?(Node t = q.tail) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+void clear(Deque q) {
+  q.head = Node null;
+  q.tail = Node null;
+  return;
+}
+
+int program (int argc, string[] argv) {
+  var q = new Deque { head = Node null; tail = Node null };
+  enqueueLeft(q, 3);
+  enqueueRight(q, 4);
+  enqueueRight(q, 1);
+  enqueueLeft(q, 2);
+  enqueueRight(q, 6);
+  print_int(peakRight(q));
+  print_int(dequeueRight(q));
+  print_int(peakRight(q));
+  print_int(dequeueRight(q));
+  print_bool(isEmpty(q));
+
+  print_int(peakRight(q));
+  print_int(dequeueRight(q));
+  print_int(peakRight(q));
+  print_int(dequeueRight(q));  
+  print_int(peakRight(q));
+  print_int(dequeueRight(q));
+  print_bool(isEmpty(q));
+  return 0;
+}

@@ -1,0 +1,62 @@
+/* take infinity to be int max value, assume shortest path is shorter than this  */
+global infinity = 9223372036854775807;
+
+/* takes number of vertices n (ints 0 to n -1), number of edges, edge list (u, v, w) of weighted directed graph, source vertex
+   computes length of shortest path from source vertex to every vertex, distances invalid if negative cycles exist
+*/
+int[] bellman_ford(int n, int m, int[][] edges, int source) {
+    var distance = new int[n];
+
+    for (var i = 0; i < n; i = i + 1;) {
+        distance[i] = infinity;
+    }
+    distance[source] = 0;
+
+    for (var i = 0; i < n - 1; i = i + 1;) {
+        for(var j = 0; j < m; j = j + 1;) {
+            var edge = edges[j];
+            var u = edge[0];
+            var v = edge[1];
+            var w = edge[2];
+            if (distance[u] + w < distance[v]) {
+                distance[v] = distance[u] + w;
+            }
+        }
+    }
+    /* check negative cycles */
+    for(var j = 0; j < m; j = j + 1;) {
+        var edge = edges[j];
+        var u = edge[0];
+        var v = edge[1];
+        var w = edge[2];
+        if (distance[u] + w < distance[v]) {
+            print_string("Negative cycle detected! Distances are invalid\n");
+        }
+    }
+    return distance;
+}
+
+int program(int argc, string[] argv) {
+  var n = 6;
+  var m = 9;
+  var edges = new int[][]{ new int[]{0, 1, 4},
+                           new int[]{0, 2, -3},
+                           new int[]{2, 1, -2},
+                           new int[]{2, 3, 10},
+                           new int[]{3, 1, 6},
+                           new int[]{2, 4, 1},
+                           new int[]{2, 5, -9},
+                           new int[]{3, 5, -1},
+                           new int[]{5, 4, 4}  };
+
+  var source = 0;
+  var dest = 5;
+  var shortest_path = -12;
+
+  var distance = bellman_ford(n, m, edges, source);
+  if (distance[dest] == shortest_path) {
+      return 0;
+  }
+
+  return 1;
+}

@@ -1,0 +1,61 @@
+struct Point {
+    int x;
+    int y
+}
+
+struct TrainPoint {
+    Point p;
+    int cluster_num
+}
+
+Point[] train (int iters, int num_clusters, int num_train_pts, Point[] training_pts) {
+    var clusters = new Point[num_clusters]{i -> new Point {x=i;y=i}};
+    var train_pts = new TrainPoint[num_train_pts]{i -> new TrainPoint {p=training_pts[i]; cluster_num=i}};
+
+    var x = 1;
+
+    for (var iter = 0; iter < iters; iter = iter + 1;) {
+        for (var p = 0; p < num_train_pts; p = p + 1;) {
+            var min_dist = -1;
+            var min_dist_cluster = -1;
+
+            for (var c = 0; c < num_clusters; c = c + 1;) {
+                var dist = (clusters[c].x - train_pts[p].p.x) * (clusters[c].x - train_pts[p].p.x) + (clusters[c].y - train_pts[p].p.y) * (clusters[c].y- train_pts[p].p.y);
+                if ((min_dist == -1) | (dist < min_dist)) {
+                    min_dist = dist;
+                    min_dist_cluster = c;
+                }
+            }
+            train_pts[p].cluster_num = min_dist_cluster;
+        }
+    }
+
+    return clusters;
+}
+
+int predict_cluster_num (Point p, Point[] clusters, int num_clusters) {
+    var min_dist = -1;
+    var min_dist_cluster = -1;
+
+    for (var c = 0; c < num_clusters; c = c + 1;) {
+        var dist = (clusters[c].x - p.x) * (clusters[c].x - p.x) + (clusters[c].y - p.y) * (clusters[c].y- p.y);
+        if ((min_dist == -1) | (dist < min_dist)) {
+            min_dist = dist;
+            min_dist_cluster = c;
+        }
+    }
+    
+    return min_dist_cluster;
+}
+
+int program(int argc, string[] args) {
+    var num_clusters = 10;
+    var num_pts = num_clusters * 2;
+    var iters = 10;
+
+    var train_pts = new Point[num_pts]{i -> new Point {x=-i;y=i * i * i}};
+    var clusters = train (iters, num_clusters, num_pts, train_pts);
+
+    var test_point = new Point{x=0;y=0};
+    return predict_cluster_num(test_point, clusters, num_clusters);
+}

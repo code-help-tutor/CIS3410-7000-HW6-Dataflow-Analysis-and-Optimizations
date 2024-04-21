@@ -1,0 +1,111 @@
+struct Color {
+  int white;
+  int gray;
+  int black
+}
+
+global cenum = new Color {white = 0; gray = 1; black = 2};   
+
+global max = 9223372036854775807;
+
+global n = 10; 
+
+int min(int x, int y) {
+    if (x < y) {
+        return x;
+    } else {
+        return y;
+    }
+}
+
+global head = 0;
+global tail = 0;
+
+void enqueue(int[] queue, int[] color, int x) {
+  queue[tail] = x;
+  tail = tail + 1;
+  color[x] = cenum.gray;
+  return;
+}
+
+int dequeue(int[] queue, int[] color) {
+  var x = queue[head];
+  head = head + 1;
+  color[x] = cenum.black;
+  return x;
+}
+
+bool bfs(int[][] capacity, int[][] flow, int[] pred, int start, int target) {
+  var color = new int[n]{i -> cenum.white};
+  var q = new int[n + 2]{i -> -1};
+
+  head = 0;
+  tail = 0;
+  enqueue(q, color, start);
+  pred[start] = -1;
+  while (head != tail) {
+    var u = dequeue(q, color);
+    for (var v = 0; v < n; v = v + 1;) {
+      if (color[v] == cenum.white & capacity[u][v] - flow[u][v] > 0) {
+        enqueue(q, color, v);
+        pred[v] = u;
+      }
+    }
+  }
+  return color[target] == cenum.black;
+}
+
+int fordFulkerson(int[][] capacity, int source, int sink) {
+  var max_flow = 0;
+  var flow = new int[][n]{i -> new int[n]{j -> 0}};
+  var pred = new int[n]{i -> -1};
+
+  while (bfs(capacity, flow, pred, source, sink)) {
+    var increment = max;
+    for (var u = n - 1; pred[u] >= 0; u = pred[u];) {
+      increment = min(increment, capacity[pred[u]][u] - flow[pred[u]][u]);
+    }
+    for (var u = n - 1; pred[u] >= 0; u = pred[u];) {
+      var t1 = flow[pred[u]][u];
+      flow[pred[u]][u] = t1 + increment;
+      var t2 = flow[u][pred[u]];
+      flow[u][pred[u]] = t2 - increment;
+    }
+    max_flow = max_flow + increment;
+  }
+  return max_flow;
+}
+
+int program(int argc, string[] argv) {
+ 
+    var capacity = new int[][n]{i -> new int[n]{j -> 0}};
+
+    capacity[0][1] = 1;
+    capacity[0][2] = 2;
+    capacity[0][3] = 4;
+    capacity[0][7] = 3;
+
+    capacity[1][4] = 5;
+    capacity[1][5] = 3;
+
+    capacity[2][4] = 3;
+
+    capacity[3][5] = 5;
+
+    capacity[4][6] = 5;
+
+    capacity[5][8] = 12;
+
+    capacity[6][5] = 4;
+
+    capacity[7][9] = 2;
+
+    capacity[8][9] = 15;
+
+    var s = 0;
+    var t = 9;
+    print_string("Max Flow: ");
+    print_int(fordFulkerson(capacity, s, t));
+    print_string(" flow.");
+    return 0;  
+}

@@ -1,0 +1,73 @@
+struct Doll {
+  int height;
+  int width
+}
+
+bool compare_dolls(Doll d1, Doll d2) {
+  if (d1.height > d2.height |
+      d1.height == d2.height & d1.width < d2.width) {
+    return true;
+  }
+  return false;
+}
+
+void bubble_sort(Doll[] arr, (Doll, Doll) -> bool compare) {
+  var n = length(arr);
+	for (var i = 0; i < n-1; i = i+1;) {
+		for (var j = 0; j < n-i-1; j = j+1;) {
+      if (compare(arr[j], arr[j + 1])) {
+				var temp = arr[j+1];
+				arr[j+1] = arr[j];
+				arr[j] = temp;
+      }
+		}
+	}
+	return;
+}
+
+int longest_increasing_subsequence(int[] arr) {
+  var n = length(arr);
+	var dp = new int[n];
+	var max_subsequence = 0;
+	
+	for (var i = 0; i < n; i = i+1;) {
+		dp[i] = 1;
+		var max_seq = 0;
+		for (var j = 0; j < i; j = j+1;) {
+			if (arr[i] > arr[j] & dp[j] > max_seq) {
+				max_seq = dp[j];
+			}
+		}
+		dp[i] = max_seq + 1;
+		
+		if (dp[i] > max_subsequence) {
+			max_subsequence = dp[i];
+		}
+	}
+	
+	return max_subsequence;
+}
+
+int max_russian_nesting_dolls((Doll[], (Doll, Doll) -> bool) -> void sorting_fn, Doll[] dolls) {
+	sorting_fn(dolls, compare_dolls);
+
+	var heights = new int[length(dolls)] {
+    i -> dolls[i].width
+  };
+
+	return longest_increasing_subsequence(heights);
+}
+
+int program(int argc, string[] argv) {
+	var dim_arr = new int[][] {
+		new int[] {5, 4},
+		new int[] {6, 4},
+		new int[] {6, 7},
+		new int[] {2, 3}
+	};
+  var dolls = new Doll[length(dim_arr)] {
+    i -> new Doll { height = dim_arr[i][0]; width = dim_arr[i][1] }
+  };
+	var res = max_russian_nesting_dolls(bubble_sort, dolls);
+	return res;
+}

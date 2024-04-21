@@ -1,0 +1,114 @@
+global empty = 1;
+global filled = 2;
+global tlen   = 0;
+global metas  = 1;
+global keys   = 2;
+global values = 3;
+
+int[][] create(int size) {
+    var hash_table= new int[][]{
+        new int[]{size},
+        new int[size],
+        new int[size],
+        new int[size]
+    };
+
+    for (var i = 0; i < size; i = i + 1;) {
+        hash_table[metas][i] = empty;
+    }
+
+    return hash_table;
+}
+
+int hash(int h) {
+    return h;
+}
+
+int table_len(int[][] hash_table) {
+    return hash_table[tlen][0];
+}
+
+int get_index(int[][] hash_table, int key) {
+    var len = table_len(hash_table);
+    var index = hash(key) [&] (len - 1);
+    return index;
+}
+
+bool insert(int[][] hash_table, int key, int value) {
+    var start_index = get_index(hash_table, key);
+    var len = table_len(hash_table);
+    var mask = len - 1;
+
+    for (var i = 0; i < len; i = i + 1;) {
+        var index = (start_index + i) [&] mask;
+
+        if (hash_table[metas][index] == filled) {
+            if (hash_table[keys][index] == key) {
+                hash_table[values][index] = value;
+                return true;
+            }
+        } else if (hash_table[metas][index] == empty) {
+            hash_table[metas][index] = filled;
+            hash_table[keys][index] = key;
+            hash_table[values][index] = value;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+int[] get(int[][] hash_table, int key) {
+    var start_index = get_index(hash_table, key);
+    var len = table_len(hash_table);
+    var mask = len - 1;
+
+    for (var i = 0; i < len; i = i + 1;) {
+        var index = (start_index + i) [&] mask;
+        if (hash_table[metas][index] == filled & hash_table[keys][index] == key) {
+            return new int[]{hash_table[values][index], 1};
+        } else if (hash_table[metas][index] == empty) {
+            return new int[]{0, 0};
+        }
+    }
+
+    return new int[]{0, 0};
+}
+
+int program (int argc, string[] argv) {
+    var tbl = create(16);
+
+    var sample_keys   = new int[]{5, 7, 2, 23, 65, 878, 23, 56, 76, 12};
+    var sample_values = new int[]{5, 7, 2, 23, 65, 878, 23, 56, 76, 12};
+    for (var i = 0; i < 10; i = i + 1;) {
+        var success = insert(tbl, sample_keys[i], sample_values[i]);
+        if (!success) {
+            print_string("failed to insert!\n");
+            return 1;
+        }
+    }
+
+    for (var i = 0; i < 10; i = i + 1;) {
+        var result = get(tbl, sample_keys[i]);
+        if (result[1] == 1) {
+            print_int(sample_keys[i]);
+            print_string(" => ");
+            print_int(result[0]);
+            print_string(", ");
+
+            if (result[0] != sample_values[i]) {
+                print_string("error! should have found value ");
+                print_int(sample_values[i]);
+                print_string("\n");
+                return 1;
+            }
+        } else {
+            print_string("entry ");
+            print_int(sample_keys[i]);
+            print_string(" not found\n");
+            return 1;
+        }
+    }
+
+    return 0;
+}

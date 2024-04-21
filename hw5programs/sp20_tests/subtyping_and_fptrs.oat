@@ -1,0 +1,38 @@
+struct Test {
+  int i;
+  bool b;
+  string s;
+  int[] arr;
+  Test? t;
+  (int) -> int f
+}
+
+struct Base {
+    int a;
+    bool b;
+    (int) -> int f
+}
+
+struct Extend {
+    int a;
+    bool b;
+    (int) -> int f;
+    string c;
+    (int) -> int g
+}
+
+int neg(int x) { return -x; }
+int inc(int x) { return x+1; }
+
+int f(Base? x, int y){
+    if?(Base b = x){
+        return b.f(y);
+    }else{
+        return -1;
+    }
+}
+
+int program(int argc, string[] argv) {
+    var s = new Extend[5]{x -> new Extend{a=3; b=true; c="hello"; f=neg; g=inc}};
+    return f(s[2], -3);
+} 

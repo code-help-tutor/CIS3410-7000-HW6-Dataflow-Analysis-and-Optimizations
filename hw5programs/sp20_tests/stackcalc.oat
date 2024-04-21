@@ -1,0 +1,147 @@
+/*
+ *      Reverse Polish Calculator
+ *
+ *          Hannah Pan  4/17/2020
+ */
+
+struct Node {
+    int value;
+    Node? next
+}
+
+struct Stack {
+    Node? top;
+    int size
+}
+
+global dash = 45;   /* '-' */
+global zero = 48;   /* '0' */
+
+void push(Stack stack, int val)
+{
+    var node = new Node { value = val; next = stack.top };
+    stack.top = node;
+    stack.size = stack.size + 1;
+    return;
+}
+
+Node? pop(Stack stack)
+{
+    if? (Node node = stack.top) {
+        stack.top = node.next;
+        stack.size = stack.size - 1;
+        return node;
+    }
+
+    return Node null;
+}
+
+int add(int a, int b) { return a + b; }
+int sub(int a, int b) { return add(a, -b); }    /* a - b */
+int mul(int a, int b) { return a * b; }
+int and(int a, int b) { return a [&] b; }
+int or(int a, int b) { return a [|] b; }
+
+(int, int) -> int getOp(int op)
+{
+    if (op == 43) { /* '+' */
+        return add;
+    }
+
+    if (op == dash) {   /* '-' */
+        return sub;
+    }
+
+    if (op == 42) { /* '*' */
+        return mul;
+    }
+
+    if (op == 38) { /* '&' */
+        return and;
+    }
+
+    if (op != 124) {    /* '|' */
+        print_int(op);
+        print_string(": unknown operator code\n");
+    }
+
+    return or;
+}
+
+bool isInt(int[] ascii)
+{
+    var i = 0;
+
+    if (ascii[0] == dash) {
+        i = 1;
+    }
+
+    if (i == length(ascii)) {
+        return false;
+    }
+
+    var digit = ascii[i] - zero;
+
+    return digit >= 0 & digit <= 9;
+}
+
+int getInt(int[] ascii)
+{
+    var isNegative = false;
+    var i = 0;
+
+    if (ascii[0] == dash) {
+        isNegative = true;
+        i = 1;
+    }
+
+    var n = 0;
+
+    while (i < length(ascii)) {
+        n = n * 10 + ascii[i] - zero;
+        i = i + 1;
+    }
+
+    if (isNegative) {
+        return -n;
+    }
+
+    return n;
+}
+
+int program(int argc, string[] argv)
+{
+    var tokens = new string[] {
+        "1", "-2", "+", "15", "-", "-16", "*", "128", "|", "-256", "&"
+    };
+
+    var stack = new Stack { top = Node null; size = 0 };
+
+    for (var i = 0; i < length(tokens); i = i + 1;) {
+        var ascii = array_of_string(tokens[i]);
+        if (isInt(ascii)) {
+            push(stack, getInt(ascii));
+        } else {
+            if? (Node right = pop(stack)) {
+                if? (Node left = pop(stack)) {
+                    var func = getOp(ascii[0]);
+                    push(stack, func(left.value, right.value));
+                } else {
+                    return 1;
+                }
+            } else {
+                return 2;
+            }
+        }
+    }
+
+    if? (Node node = pop(stack)) {
+        if (stack.size == 0) {
+            print_int(node.value);  /* 256 */
+            print_string("\n");
+            return 0;
+        }
+    }
+
+    return 3;
+}

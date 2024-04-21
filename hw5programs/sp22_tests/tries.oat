@@ -1,0 +1,75 @@
+struct Node {
+    Node?[] children;
+    bool is_word
+}
+
+void add_word (Node trie, string word) {
+    var curr = trie;
+
+    var str = array_of_string(word);
+    var len = length(str);
+
+    for (var i = 0; i < len; i = i + 1; ) {
+        var letter_num = str[i] - 97;
+        if? (Node child = curr.children[letter_num]) {
+            child.is_word = true;
+            curr = child;
+        } else {
+            curr.children[letter_num] = new Node{children = new Node?[26]; is_word = (i == len - 1)};
+            if? (Node child_node = curr.children[letter_num]) {
+                curr = child_node;
+            }
+        }
+    }
+    return;
+}
+
+bool find_word (Node trie, string word) {
+    var curr = trie; 
+
+    var str = array_of_string(word);
+    var len = length(str);
+    
+    for (var i = 0; i < len; i = i + 1; ) {
+        var letter_num = str[i] - 97;
+        if? (Node child = curr.children[letter_num]) {
+            if (i == len - 1 & child.is_word) {
+                return true;
+            } 
+            curr = child;
+        } else {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+int program (int argc, string[] argv) {
+    var trie = new Node{children = new Node?[26]; is_word = false };
+    
+    add_word(trie, "steve");
+    add_word(trie, "bear");
+    add_word(trie, "bea");
+    add_word(trie, "bell");
+    add_word(trie, "bid");
+    add_word(trie, "gary");
+    add_word(trie, "min");
+    add_word(trie, "meek");
+    add_word(trie, "tin");
+    add_word(trie, "buy");
+    add_word(trie, "sell");
+    add_word(trie, "stock");
+    add_word(trie, "stop");
+
+    var word_exists1 = find_word(trie, "gary");
+    var word_exists2 = find_word(trie, "bea");
+    var word_exists3 = find_word(trie, "steve");
+    var word_dne = find_word(trie, "ste");
+
+    if (word_exists1 & word_exists2 & word_exists3 & !word_dne) {
+        return 1;
+    }
+
+    return 0;
+}

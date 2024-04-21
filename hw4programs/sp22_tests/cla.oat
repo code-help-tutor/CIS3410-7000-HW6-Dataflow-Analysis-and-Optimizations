@@ -1,0 +1,51 @@
+int program (int argc, string[] argv) {
+    return cla(11, 15);
+}
+
+int cla(int a, int b) {
+    var prop0 = propagate(((a [&] 1) == 1), ((b [&] 1) == 1));
+    var prop1 = propagate(((a [&] 2) == 2), ((b [&] 2) == 2));
+    var prop2 = propagate(((a [&] 4) == 4), ((b [&] 4) == 4));
+    var prop3 = propagate(((a [&] 8) == 8), ((b [&] 8) == 8));
+    var gen0 = generate(((a [&] 1) == 1), ((b [&] 1) == 1));
+    var gen1 = generate(((a [&] 2) == 2), ((b [&] 2) == 2));
+    var gen2 = generate(((a [&] 4) == 4), ((b [&] 4) == 4));
+    var gen3 = generate(((a [&] 8) == 8), ((b [&] 8) == 8));
+
+    var c1 = gen0;
+    var c2 = gen1 | (gen0 & prop1);
+    var c3 = gen2 | (gen0 & prop1 & prop2) | (gen1 & prop2);
+    var c4 = gen3 | (gen0 & prop1 & prop2 & prop3) | (gen1 & prop2 & prop3) | (gen2 & prop3);
+
+    var carryValues = 0;
+    if (c1) {
+        carryValues = carryValues [|] 2;
+    }
+    if (c2) {
+        carryValues = carryValues [|] 4;
+    }
+    if (c3) {
+        carryValues = carryValues [|] 8;
+    }
+    if (c4) {
+        carryValues = carryValues [|] 16;
+    }
+    var x = xor(a, b);
+
+    var r = xor(carryValues, x);
+    return r;
+}
+
+bool propagate (bool p1, bool p2)
+{
+    return p1 | p2;
+}
+
+bool generate (bool g1, bool g2)
+{
+    return g1 & g2;
+}
+
+int xor (int x, int y) {
+ return ~(x [&] y) [&] (x [|] y);
+}

@@ -1,0 +1,25 @@
+struct Paint {
+  int red;
+  int blue;
+  int yellow
+}
+
+int maxBuckets (Paint[] x) {
+  var max = 0;
+  var numBuckets = 0;
+  for (var i = 0; i < length(x); i = i + 1;) {
+    numBuckets = numBuckets + x[i].red + x[i].blue + x[i].yellow;
+    if (numBuckets > max) {
+       max = numBuckets;
+    }
+  }
+  return max;
+}
+
+int program (int argc, string[] argv) {
+  var x = new Paint {red = 1; blue = 2; yellow = 3};
+  var y = new Paint {red = 1; blue = 2; yellow = 3};
+  var z = new Paint {red = -2; blue = -4; yellow = -6};
+  var a = new Paint[]{x, y, z};
+  return maxBuckets(a);
+}

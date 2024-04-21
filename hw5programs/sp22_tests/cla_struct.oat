@@ -1,0 +1,62 @@
+struct Adder {
+    bool prop;
+    bool gen
+}
+
+
+int program (int argc, string[] argv) {
+    return cla(11, 20);
+}
+
+
+
+int cla(int a, int b) {
+    var a0 = new Adder {prop = (propagate(((a [&] 1) == 1), ((b [&] 1) == 1))); 
+    gen = generate(((a [&] 1) == 1), ((b [&] 1) == 1))};
+
+    var a1 = new Adder {prop = propagate(((a [&] 2) == 2), ((b [&] 2) == 2));
+    gen = generate(((a [&] 2) == 2), ((b [&] 2) == 2)) };
+
+    var a2 = new Adder {prop = propagate(((a [&] 4) == 4), ((b [&] 4) == 4));
+    gen = generate(((a [&] 4) == 4), ((b [&] 4) == 4)) };
+
+    var a3 = new Adder {prop = propagate(((a [&] 8) == 8), ((b [&] 8) == 8));
+    gen = generate(((a [&] 8) == 8), ((b [&] 8) == 8))};
+
+    var c1 = a0.gen;
+    var c2 = a1.gen | (a0.gen & a1.prop);
+    var c3 = a2.gen | (a0.gen & a1.prop & a2.prop) | (a1.gen & a2.prop);
+    var c4 = a3.gen | (a0.gen & a1.prop & a2.prop & a3.prop) | (a1.gen & a2.prop & a3.prop) | (a2.gen & a3.prop);
+    
+    var carryValues = 0;
+    if (c1) {
+        carryValues = carryValues [|] 2;
+    }
+    if (c2) {
+        carryValues = carryValues [|] 4;
+    }
+    if (c3) {
+        carryValues = carryValues [|] 8;
+    }
+    if (c4) {
+        carryValues = carryValues [|] 16;
+    }
+    var x = xor(a, b);
+    
+    var r = xor(carryValues, x);
+    return r;
+}
+
+bool propagate (bool p1, bool p2)
+{
+    return p1 | p2;
+}
+
+bool generate (bool g1, bool g2)
+{
+    return g1 & g2;
+}
+
+int xor (int x, int y) {
+ return ~(x [&] y) [&] (x [|] y);
+}

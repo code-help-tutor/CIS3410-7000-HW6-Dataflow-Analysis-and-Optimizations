@@ -1,0 +1,63 @@
+struct Node {
+    int val;
+    Node? left;
+    Node? right
+}
+
+global root = new Node {
+    val = 5;
+    left = new Node {
+        val = 2;
+        left = new Node {
+            val = 1;
+            left = Node null;
+            right = Node null
+        };
+        right = Node null
+    };
+    right = new Node {
+        val = 10;
+        left = new Node {
+            val = 7;
+            left = Node null;
+            right = new Node {
+                val = 8;
+                left = Node null;
+                right = Node null
+            }
+        };
+        right = new Node {
+            val = 20;
+            left = Node null;
+            right = Node null
+        }
+    }
+};
+
+bool lookup (int i, Node n) {
+    if (i == n.val) {
+        return true;
+    }
+
+    if (i < n.val) {
+        if? (Node left = n.left) {
+            return lookup(i, left);
+        }
+    } else {
+        if? (Node right = n.right) {
+            return lookup(i, right);
+        }
+    }
+    return false;
+}
+
+int program(int argc, string[] argv) {
+    print_bool(lookup(7, root));
+    print_string(" ");
+    print_bool(lookup(13, root));
+    print_string(" ");
+    print_bool(lookup(8, root));
+    print_string(" ");
+    print_bool(lookup(2, root));
+    return 0;
+}

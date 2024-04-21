@@ -1,0 +1,45 @@
+struct Vec2 {
+  int x;
+  int y
+}
+
+struct Triangle {
+  Vec2 p1;
+  Vec2 p2;
+  Vec2 p3
+}
+
+bool edgeFunction(Vec2 a, Vec2 b, Vec2 point) {
+  return (point.x - a.x) * (b.y - a.y) - (point.y - a.y) * (b.x - a.x) >= 0;
+}
+
+bool isInside(Vec2 point, Triangle t) {
+  return edgeFunction(t.p1, t.p2, point) & edgeFunction(t.p2, t.p3, point) & edgeFunction(t.p3, t.p1, point);
+}
+
+void render(Triangle triangle) {
+  print_string("\n");
+  for (var i = 0; i < 24; i = i + 1;) {
+    for (var j = 0; j < 80; j = j + 1;) {
+      var point = new Vec2 {x = i; y = j};
+      if (isInside(point, triangle)) {
+        print_string("&");
+      } else {
+        print_string("!");
+      }
+    }
+    print_string("\n");
+  }
+  print_string("\n");
+  return;
+}
+
+int program(int argc, string[] args) {
+  var triangle = new Triangle {
+    p1 = new Vec2 { x = 20; y = 4 };
+    p2 = new Vec2 { x = 5; y = 25 };
+    p3 = new Vec2 { x = 10; y = 68 }
+  };
+  render(triangle);
+  return 1;
+}

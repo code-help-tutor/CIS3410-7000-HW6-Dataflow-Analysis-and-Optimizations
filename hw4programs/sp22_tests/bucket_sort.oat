@@ -1,0 +1,54 @@
+global arr = new int[]{394, 901, 617, 876, 714, 865, 234, 79, 100, 123};
+global arr_size = 10;
+
+int max_in_arr(int[] arr, int size) {
+    var max = 0;
+    for (var i = 0; i < 10; i = i + 1;) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    return max;
+}
+
+void print_arr(int[] arr, int size) {
+    print_string("[");
+    for (var i = 0; i < 10; i = i + 1;) {
+        var elt_string = string_of_int(arr[i]);
+        print_string(elt_string);
+        if (i != size - 1) {
+            print_string(", ");
+        }
+    }
+    print_string("]\n");
+    return;
+}
+
+void populate_buckets(int[] arr, int size, int[] buckets) {
+    for (var i = 0; i < size; i = i + 1;) {
+        buckets[arr[i]] = arr[i];
+    }
+    return;
+}
+
+void copy_from_buckets(int[] buckets, int size, int[] arr) {
+    var counter = 0;
+    for (var i = 0; i < size; i = i + 1;) {
+        if (buckets[i] != 0) {
+            arr[counter] = buckets[i];
+            counter = counter + 1;
+        }
+    }
+    return;
+}
+
+int program(int argc, string[] argv) {
+    var buckets_size = max_in_arr(arr, arr_size) + 1;
+    var buckets = new int[buckets_size];
+
+    populate_buckets(arr, arr_size, buckets);
+    copy_from_buckets(buckets, buckets_size, arr);
+    print_arr(arr, arr_size);
+
+    return 1;
+}

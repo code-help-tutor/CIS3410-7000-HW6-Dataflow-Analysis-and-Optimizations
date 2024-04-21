@@ -1,0 +1,58 @@
+int divide (int a, int b) {
+    if (b == 0) {
+        print_string("Impossible!");
+        return 0;
+    }
+
+    var result = 0;
+    while (a >= b) {
+        a = a - b;
+        result = result + 1;
+    }
+
+    return result;
+}
+
+int remainder (int a, int b) {
+    if (b == 0) {
+        print_string("Impossible!");
+        return 0;
+    }
+
+    while (a >= b) {
+        a = a - b;
+    }
+
+    return a;
+}
+
+bool isPalindrome (int input) {
+    var testInput = input;
+    var reversed = 0;
+    var remainder = 0;
+
+    while (testInput != 0) {
+        remainder = remainder(testInput, 10);
+        reversed = reversed * 10 + remainder;
+        testInput = divide(testInput, 10);
+    }
+
+    if (input == reversed) {
+        return true;
+    }
+    return false;
+}
+
+int program (int argc, string[] argv) {
+    var palindrome = 123454321;
+    var nonPalindrome = 5589260144;
+
+    var bool1 = isPalindrome(palindrome);
+    var bool2 = isPalindrome(nonPalindrome);
+
+    if (bool1 & !bool2) {
+        print_string("Correct!");
+    }
+
+    return 0;
+}

@@ -1,0 +1,22 @@
+void left_rotate_by_one(int[] arr, int size) {
+    var temp = arr[0];
+    for (var i = 0; i < size - 1; i = i + 1;) {
+        arr[i] = arr[i + 1];
+    }
+    arr[size - 1] = temp;
+    return;
+}
+
+void left_rotate(int[] arr, int size, int num) {
+    for (var i = 0; i < num; i = i + 1;) {
+        left_rotate_by_one(arr, size);
+    }
+    return;
+}
+
+int program(int argc, string[] args) {
+  var arr = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
+  left_rotate(arr, 9, 3);
+  return arr[0];
+}
+

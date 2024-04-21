@@ -1,0 +1,31 @@
+int program (int argc, string[] argv) {
+  var gas = new int[]{1,2,3,4,5};
+  var costs = new int[]{3,4,5,1,2};
+  var size = 5;
+  var index = can_complete(gas, costs, size);
+  return index;
+}
+
+int can_complete(int[] gas, int[] costs, int size) {
+  var curr = 0;
+  var total = 0;
+  var diff = 0;
+  var startIdx = 0;
+
+  for (var i = 0; i < size; i = i + 1;) {
+    diff = gas[i] - costs[i];
+    total = total + diff;
+    curr = curr + diff;
+
+    if (curr < 0) {
+      startIdx = i + 1;
+      curr = 0;
+    }
+  }
+
+  if (total >= 0) {
+    return startIdx;
+  }
+
+  return -1;
+}

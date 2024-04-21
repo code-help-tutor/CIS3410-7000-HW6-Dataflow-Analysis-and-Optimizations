@@ -1,0 +1,39 @@
+struct BST {
+  int val;
+  BST? left;
+  BST? right
+}
+
+bool search(int value, BST root) {
+  print_int(root.val);
+  print_string("\n");
+  if (value == root.val) {
+    return true;
+  }
+  if (value < root.val) {
+    if? (BST x = root.left) {
+      return search(value, x);
+    } else {
+      return false;
+    }
+  } else {
+    if? (BST x = root.right) {
+      return search(value, x);
+    } else {
+      return false;
+    }
+  }
+} 
+
+int program (int argc, string[] argv) {
+  /* Construct BST */
+  var rl = new BST{val=3; left=BST null; right=BST null};
+  var l = new BST{val=0; left=BST null; right=BST null};
+  var r = new BST{val=4; left=rl; right=BST null};
+  var root = new BST {val=1; left=l; right=r};
+  
+  /* Search for 3 */
+  print_bool(search(3, root));
+  print_string("\n");
+  return root.val;
+}

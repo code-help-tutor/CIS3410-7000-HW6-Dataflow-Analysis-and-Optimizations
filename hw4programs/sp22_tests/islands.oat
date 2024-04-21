@@ -1,0 +1,37 @@
+global islands = new int[][] {
+                        new int[] {0, 1, 0, 0, 0, 1, 0},
+                        new int[] {1, 1, 0, 1, 1, 1, 0},
+                        new int[] {1, 0, 0, 0, 0, 0, 0},
+                        new int[] {0, 0, 1, 1, 1, 0, 1},
+                        new int[] {0, 0, 1, 1, 0, 0, 0},
+                        new int[] {0, 0, 0, 1, 0, 0, 0}
+                    };
+
+void dfs(int i, int j) {
+    if (i >= 0 & i < 6 & j >= 0 & j < 7) {
+        if (islands[i][j] != 0) {
+            islands[i][j] = 0;
+            dfs(i - 1, j);
+            dfs(i + 1, j);
+            dfs(i, j + 1);
+            dfs(i, j - 1);
+        }
+    }
+    return;
+}
+
+int program(int argc, string[] argv) {
+    var num_islands = 0;
+
+    for (var i = 0; i < 6; i = i + 1;) {
+        for (var j = 0; j < 7; j = j + 1;) {
+            if (islands[i][j] != 0) {
+                num_islands = num_islands + 1;
+                dfs(i, j);
+            }
+        }
+    }
+
+    return num_islands;
+}
+

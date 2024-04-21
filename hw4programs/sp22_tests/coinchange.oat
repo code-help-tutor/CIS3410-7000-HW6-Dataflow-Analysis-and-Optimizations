@@ -1,0 +1,27 @@
+int change(int amount, int[] coins, int length) {
+
+  var dp = new int[amount + 1];
+  dp[0] = 1;
+
+  for (var i = 0; i < length; i = i+1;) {
+    var coinVal = coins[i];
+
+    for (var j = coinVal; j <= amount; j=j+1;) {
+      dp[j] = dp[j] + dp[j - coinVal];
+    }
+  }
+  return dp[amount];
+}
+
+
+int program(int argc, string[] argv) {
+  var amount = 11;
+  var coins = new int[]{1, 5, 10, 25};
+
+
+  var ret = change(amount, coins, 4);
+
+  return ret;
+}
+
+

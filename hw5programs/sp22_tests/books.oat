@@ -1,0 +1,150 @@
+struct Book {
+    string title; 
+    int critic_rating; 
+    int general_rating;
+    int pages;
+    string genre
+}
+
+global library = new Book[]{
+    new Book{title = "The Hunger Games"; critic_rating = 7; general_rating = 9; pages = 374; genre = "science fiction"},
+    new Book{title = "Dune"; critic_rating = 8; general_rating = 10; pages = 412; genre = "science fiction"},
+    new Book{title = "Ender's Game"; critic_rating = 9; general_rating = 7; pages = 324; genre = "science fiction"},
+    new Book{title = "A Game of Thrones Song of Ice and Fire"; critic_rating = 8; general_rating = 7; pages = 694; genre = "fantasy"},
+    new Book{title = "Eragon"; critic_rating = 9; general_rating = 8; pages = 509; genre = "fantasy"},
+    new Book{title = "The Diary of a Young Girl"; critic_rating = 10; general_rating = 8; pages = 318; genre = "non-fiction"}
+};
+
+Book? reduce_to_book(Book[] books, (Book, Book?) -> Book? reducer, Book? initial_value) {
+    var ret = initial_value;
+    for (var i = 0; i < length(books); i = i + 1;) {
+        ret = reducer(books[i], ret);
+    }
+    return ret;
+}
+
+Book? best_critic_reducer(Book book, Book? acc) {
+    if? (Book nonnull_acc = acc) {
+        if (nonnull_acc.critic_rating < book.critic_rating) {
+            return book;
+        } else {
+            return nonnull_acc;
+        }
+    } else {
+        return book;
+    }
+}
+
+Book? best_critic(Book[] books) {
+    return reduce_to_book(library, best_critic_reducer, Book null);
+}
+
+Book? best_general_reducer(Book book, Book? acc) {
+    if? (Book nonnull_acc = acc) {
+        if (nonnull_acc.general_rating < book.general_rating) {
+            return book;
+        } else {
+            return nonnull_acc;
+        }
+    } else {
+        return book;
+    }
+}
+
+Book? best_general(Book[] books) {
+    return reduce_to_book(library, best_general_reducer, Book null);
+}
+
+Book? most_pages_reducer(Book book, Book? acc) {
+    if? (Book nonnull_acc = acc) {
+        if (nonnull_acc.pages < book.pages) {
+            return book;
+        } else {
+            return nonnull_acc;
+        }
+    } else {
+        return book;
+    }
+}
+
+Book? most_pages(Book[] books) {
+    return reduce_to_book(library, most_pages_reducer, Book null);
+}
+
+int divide(int num, int den) {
+    var curr = 0; 
+    while (num >= den) {
+        curr = curr + 1;
+        num = num - den;
+    }
+    return curr;
+}
+
+int average(Book[] books, (Book) -> int select) {
+    var curr_sum = 0;
+    for (var i = 0; i < length(books); i = i + 1;) {
+        curr_sum = curr_sum + select(books[i]);
+    }
+    return divide(curr_sum, length(books));
+}
+
+int select_crit_rating(Book b) {
+    return b.critic_rating;
+}
+
+int select_gen_rating(Book b) {
+    return b.general_rating;
+}
+
+int select_page(Book b) {
+    return b.pages;
+}
+
+int average_crit(Book[] books) {
+    return average(books, select_crit_rating);
+}
+
+int average_gen(Book[] books) {
+    return average(books, select_gen_rating);
+}
+
+int average_pages(Book[] books) {
+    return average(books, select_page);
+}
+
+
+int program (int argc, string[] argv) {
+    var best_c = best_critic(library);
+    var best_g = best_general(library);
+    var most_p = most_pages(library);
+    var avg_crit = average_crit(library);
+    var avg_gen = average_gen(library);
+    var avg_pages = average_pages(library);
+
+ if? (Book nonnull_best_c = best_c)
+ {
+  print_string("The best book by critic reviews is ");
+  print_string(nonnull_best_c.title);
+ }
+
+ if? (Book nonnull_best_g = best_g)
+ {
+  print_string(", the best book by general reviews is ");
+  print_string(nonnull_best_g.title);
+ }
+
+    if? (Book nonnull_most_pages = most_p)
+ {
+  print_string(", the longest book is ");
+  print_string(nonnull_most_pages.title);
+ }
+
+    print_string(", the average critic rating is ");
+    print_int(avg_crit);
+    print_string(", the average general rating is ");
+    print_int(avg_gen);
+    print_string(", the average page count is ");
+    print_int(avg_pages);
+
+ return 0;
+}

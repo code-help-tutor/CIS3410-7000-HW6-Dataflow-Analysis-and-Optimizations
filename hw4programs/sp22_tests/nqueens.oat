@@ -1,0 +1,54 @@
+global n = 4;
+
+int n_queens(int row, int state) {
+    if (row >= n) {
+        for (var i = 0; i < n; i = i + 1; ) {
+            var cur = state >> 4 * i [&] 15;
+            for (var j = 0; j < n; j = j + 1; ) {
+                if (cur == j) {
+                    print_string("*");
+                } else {
+                    print_string("-");
+                }
+            }
+            print_string("\n");
+        }
+        print_string("\n");
+        return 1;
+    }
+
+    var total = 0;
+    for (var i = 0; i < n; i = i + 1; ) {
+        var ok = true;
+        for (var j = 1; j <= row; j = j + 1; ) {
+            var cur = state >> 4 * (j - 1) [&] 15;
+            if (cur == i | cur == i - j | cur == i + j) {
+                ok = false;
+                j = row;
+            }
+        }
+        if (ok) {
+            total = total + n_queens(row + 1, state << 4 [|] i);
+        }
+    }
+
+    return total;
+}
+
+int atoi(string s) {
+    var ret = 0;
+    var arr = array_of_string(s);
+    for (var i = 0; i < arr[-1]; i = i + 1; ) {
+        ret = ret * 10 + arr[i] - 48;
+    }
+    return ret;
+}
+
+int program(int argc, string[] argv) {
+    if (argc >= 2) {
+        n = atoi(argv[1]);
+    }
+
+    print_int(n_queens(0, 0));
+    return 0;
+}

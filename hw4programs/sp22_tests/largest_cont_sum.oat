@@ -1,0 +1,41 @@
+int largest_continuous_sum(int[] arr, int lo, int hi) {
+    if (lo == hi) {
+        return arr[lo];
+    }
+    var mid = (lo + hi) >> 1;
+    var left_sum = largest_continuous_sum(arr, lo, mid);
+    var right_sum = largest_continuous_sum(arr, mid + 1, hi);
+
+    var sum = arr[mid + 1];
+    var middle_right_sum = arr[mid + 1];
+    for (var i = mid + 2; i <= hi; i = i + 1; ) {
+        sum = sum + arr[i];
+        if (sum > middle_right_sum) {
+            middle_right_sum = sum;
+        }
+    }
+
+    sum = arr[mid];
+    var middle_left_sum = arr[mid];
+    for (var i = mid - 1; i >= lo; i = i - 1; ) {
+        sum = sum + arr[i];
+        if (sum > middle_left_sum) {
+            middle_left_sum = sum;
+        }
+    }
+
+    var middle_sum = middle_left_sum + middle_right_sum;
+
+    if (middle_sum > left_sum & middle_sum > right_sum) {
+        return middle_sum;
+    } else if (left_sum > middle_sum & left_sum > right_sum) {
+        return left_sum;
+    }
+
+    return right_sum;
+}
+
+int program(int argc, string[] argv) {
+    var arr = new int[]{2, -3, 100, 5, 20, -50};
+    return largest_continuous_sum(arr, 0, 5);
+}

@@ -1,0 +1,94 @@
+struct Node {  
+    int id;  
+    Node?[] neighbors  
+}  
+  
+struct Elt {  
+    Node node;  
+    Elt? below  
+}  
+  
+struct Stack {  
+    Elt? top  
+}  
+  
+void print_int_array(int[] arr) {  
+  for (var i = 0; i < length(arr); i = i + 1;) {  
+    print_int(arr[i]);  
+    print_string(" ");  
+  }  
+  return;  
+}  
+  
+void visit(bool[] visited, Node? nt, Stack s) {  
+    if? (Node n = nt) {  
+        if (visited[n.id]) {  
+            return;   
+        } else {  
+            visited[n.id] = true;  
+            s.top = new Elt { node = n; below = s.top};  
+            var len = length(n.neighbors);  
+            for (var i = 0; i < len ; i = i + 1;) {  
+                visit(visited, n.neighbors[i], s);  
+            }  
+        }  
+    }  
+    return;  
+}  
+  
+/* We assume that all nodes are reachable by root */  
+Stack? toposort(int n, Node? rootp) {  
+    if? (Node root = rootp) {  
+        var s = new Stack { top = new Elt { node = root; below = Elt null} };      
+        var visited = new bool[n];  
+        visit (visited, root, s);  
+        return s;  
+    }  
+    return Stack null;  
+}  
+  
+int[] order(int n, Stack? s) {  
+    if? (Stack st = s) {  
+        if? (Elt e = st.top) {  
+            var ret = new int[n];  
+            var idx = n - 1;  
+            var loop = true;  
+            while (loop) {  
+                if? (Elt e2 = e.below) {  
+                    ret[idx] = e.node.id;  
+                    e = e2;  
+                    idx = idx - 1;  
+                    if (idx < 0) {  
+                        loop = false;  
+                    }  
+                } else {  
+                    loop = false;  
+                }  
+            }  
+            return ret;  
+        }  
+    }  
+    return new int[n];  
+}  
+  
+int program (int argc, string[] argv) {  
+    var n0 = new Node { id = 0; neighbors = new Node?[7] };  
+    var n1 = new Node { id = 1; neighbors = new Node?[7] };  
+    var n2 = new Node { id = 2; neighbors = new Node?[7] };  
+    var n3 = new Node { id = 3; neighbors = new Node?[7] };  
+    var n4 = new Node { id = 4; neighbors = new Node?[7] };  
+    var n5 = new Node { id = 5; neighbors = new Node?[7] };  
+    var n6 = new Node { id = 6; neighbors = new Node?[7] };  
+    n0.neighbors[0] = n1;  
+    n0.neighbors[1] = n2;  
+    n0.neighbors[2] = n3;  
+    n1.neighbors[0] = n4;  
+    n1.neighbors[1] = n5;  
+    n2.neighbors[0] = n5;  
+    n3.neighbors[0] = n6;  
+    n4.neighbors[0] = n6;  
+    var s = toposort(7, n0);  
+    var o = order(7, s);  
+    print_int_array(o);  
+    return 0;  
+}

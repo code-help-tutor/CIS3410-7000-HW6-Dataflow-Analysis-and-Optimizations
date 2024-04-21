@@ -1,0 +1,92 @@
+struct Node {
+  Node? left;
+  Node? parent;
+  int val;
+  Node? right
+}
+
+global t1_root = new Node { left = Node null; parent = Node null; val = 1; right = Node null };
+global t1 = t1_root;
+global t1_ans = Node null;
+
+Node first_node (Node t) {
+  while (true) {
+    if? (Node t_new = t.left) {
+      t = t_new;
+    } else {
+      return t;
+    }
+  }
+  return t;
+}
+
+Node? inorder_successor (Node t) {
+  while (true) {
+    if? (Node t_right = t.right) {
+      return first_node(t_right);
+    }
+    else {
+      if? (Node t_parent = t.parent) {
+        if? (Node t_parent_left = t_parent.left) {
+          if (t == t_parent_left) {
+            return t_parent;
+          }
+        }
+        t = t_parent;
+      }
+      else {
+        return Node null;
+      }
+    }
+  }
+  return Node null;
+}
+
+bool nodes_equal(Node? node1, Node? node2) {
+  return node1 == node2;
+}
+
+bool test_t1 () {
+  return nodes_equal(inorder_successor(t1), t1_ans);
+}
+
+bool test_t2 () {
+  var t_root = new Node { left = Node null; parent = Node null; val = 1; right = Node null };
+  var t_l = new Node {left = Node null; parent = t_root; val = 2; right = Node null };
+  t_root.left = t_l;
+  var t_r = new Node { left = Node null; parent = Node null; val = 3; right = Node null };
+  t_root.right = t_r;
+  var t = t_root;
+  var t_ans = t_r;
+  return nodes_equal(inorder_successor(t), t_ans);
+}
+
+bool test_t3 () {
+  var t_root = new Node { left = Node null; parent = Node null; val = 1; right = Node null };
+  var t_l = new Node {left = Node null; parent = t_root; val = 2; right = Node null };
+  t_root.left = t_l;
+  var t_r = new Node { left = Node null; parent = Node null; val = 3; right = Node null };
+  t_root.right = t_r;
+  var t = t_l;
+  var t_ans = t_root;
+  return nodes_equal(inorder_successor(t), t_ans);
+}
+
+bool test_t4 () {
+  var t_root = new Node { left = Node null; parent = Node null; val = 1; right = Node null };
+  var t_l = new Node {left = Node null; parent = t_root; val = 2; right = Node null };
+  t_root.left = t_l;
+  var t_r = new Node { left = Node null; parent = Node null; val = 3; right = Node null };
+  t_root.right = t_r;
+  var t = t_r;
+  var t_ans = Node null;
+  return nodes_equal(inorder_successor(t), t_ans);
+}
+
+int program (int argc, string[] argv) {
+  if (!test_t1()) { return 1; }
+  if (!test_t2()) { return 2; }
+  if (!test_t3()) { return 3; }
+  if (!test_t4()) { return 4; }
+  return 0;
+}

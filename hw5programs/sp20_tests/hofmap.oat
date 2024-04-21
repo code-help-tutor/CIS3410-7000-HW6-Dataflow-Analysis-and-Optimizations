@@ -1,0 +1,60 @@
+/* Fill in what type you would like to map From */
+
+/* Generic Container value */
+/* fill it with fields */
+struct A {
+    int x
+}
+
+/* type trick need to mirror fields of A to allow maps */
+struct B {
+    int x
+}
+
+struct List {
+    List? next;
+    A value
+}
+
+/* define your mapper - this is an incrementer */
+B mapper (A a) {
+    return new A{x = a.x + 2};
+}
+
+List? mapl ((A) -> B f, List? l) {
+    if?(List n = l.next) {
+        var recursiveCall = mapr(f, n);
+        var mapC = f(l.value);
+        var newList = new List {next = recursiveCall; value = mapC};
+        return newList;
+    } else {
+        return List null;
+    }
+}
+
+List? mapr((A)-> B f, List? l) {
+    if?(List n = l.next) {
+        var recursiveCall = mapl(f, n);
+        var mapC = f(l.value);
+        var newList = new List {next = recursiveCall; value = mapC};
+        return newList;
+    } else {
+        return List null;
+    }
+}
+
+int program (int argc, string[] argv) {
+    var v1 = new A{x = 5};
+    var v2 = new A{x = 2};
+    var v3 = new A{x = 3};
+    
+    var end = new List {next = List null; value = v3};
+    var mid = new List {next = end; value = v2};
+    var st = new List {next = mid; value = v1};
+
+    var nl = mapl (mapper, st);
+    if? (List nnull = nl) {
+        return nnull.value.x;
+    }
+    return 0;
+}

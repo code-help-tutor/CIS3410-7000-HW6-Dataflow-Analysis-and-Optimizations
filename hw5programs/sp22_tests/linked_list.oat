@@ -1,0 +1,99 @@
+/* doubly linked list */
+struct List {
+    Node? head;
+    Node? tail
+}
+
+/* node in a doubly linked list */
+struct Node {
+    Node? prev;
+    Node? next;
+    int val
+}
+
+/* struct type allows for nullable ints */
+struct Int {
+    int val
+}
+
+List empty() {
+    return new List { head = Node null; tail = Node null };
+}
+
+void push_back(List l, int x) {
+    if?(Node tail = l.tail) {
+        var newest = new Node {prev = tail; next = Node null; val = x};
+        tail.next = newest;
+        l.tail = newest;
+    } else {
+        var newest = new Node {prev = Node null; next = Node null; val = x};
+        l.head = newest;
+        l.tail = newest;
+    }
+    return;
+}
+
+Int? pop_back(List l) {
+    if?(Node tail = l.tail) {
+        l.tail = tail.prev;
+        if?(Node head = l.head) {
+            /* pass */
+        } else {
+            l.head = Node null;
+        }
+
+        if?(Node prev = tail.prev) {
+            prev.next = Node null;
+        }
+
+        return new Int{val=tail.val};
+    } else {
+        return Int null;
+    }
+}
+
+void print_opt_int(Int? x) {
+    if?(Int y = x) {
+        print_int(y.val);
+        print_string("\n");
+    } else {
+        print_string("None\n");
+    }
+    return;
+}
+
+/* apply f to each element in l. mutating. */
+void map(List l, (int) -> int f) {
+    var next = l.head;
+    while (true) {
+        if?(Node n = next) {
+            n.val = f(n.val);
+            next = n.next;
+        } else {
+            return;
+        }
+    }
+    return;
+}
+
+int add5(int x) {
+    return x + 5;
+}
+
+int program (int argc, string[] argv) {
+    var l = empty();
+    push_back(l, 1);
+    push_back(l, 2);
+    push_back(l, 3);
+    
+    map(l, add5);
+    print_opt_int(pop_back(l));
+    map(l, add5);
+    print_opt_int(pop_back(l));
+    map(l, add5);
+    print_opt_int(pop_back(l));
+    map(l, add5);
+    print_opt_int(pop_back(l));
+
+    return 0;
+}

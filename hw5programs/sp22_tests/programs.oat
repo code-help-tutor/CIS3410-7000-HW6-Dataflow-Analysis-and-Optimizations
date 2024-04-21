@@ -1,0 +1,62 @@
+struct Entity {
+    int position;
+    int velocity;
+    int acceleration
+}
+
+struct George {
+    int position;
+    int velocity;
+    int acceleration;
+    int age
+}
+
+struct Aidan {
+    int position;
+    int velocity;
+    int acceleration;
+    int height
+}
+
+void print_entity(Entity e) {
+    print_string("position: ");
+    print_int(e.position);
+    print_string(" velocity: ");
+    print_int(e.velocity);
+    print_string(" acceleration: ");
+    print_int(e.acceleration);
+    print_string(" ");
+    return;
+}
+
+int program(int argc, string[] argv) {
+    var aidan = new Aidan {
+        position = -10;
+        velocity = 1;
+        acceleration = 2;
+        height = 4
+    };
+    var george = new George {
+        position = 0;
+        velocity = -1;
+        acceleration = 3;
+        age = 4
+    };
+    var entities = new Entity[]{aidan, george};
+    for (var time = 0; time < 100; time = time + 1;) {
+        for (var i = 0; i < length(entities); i = i + 1;) {
+            entities[i].velocity = entities[i].acceleration + entities[i].velocity;
+            entities[i].position = entities[i].position + entities[i].velocity;
+        }
+    }
+    print_string("Printing Aidan info! ");
+    print_entity(aidan);
+    print_string("height: ");
+    print_int(aidan.height);
+    print_string(" Printing George info! ");
+    print_entity(george);
+    print_string("age: ");
+    print_int(george.age); 
+    print_string(" ");
+    return 0;        
+}

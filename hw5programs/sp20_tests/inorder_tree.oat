@@ -1,0 +1,53 @@
+struct Node {
+    Node? left;
+    Node? right;
+    int val
+}
+
+void inorder_traversal(Node? node) {
+    if?(Node n = node) {
+        inorder_traversal(n.left);
+        print_int(n.val);
+        inorder_traversal(n.right);
+    }
+    return;
+}
+
+void bst_insert(Node n, int x) {
+    if ( x == n.val ) {
+        return;
+    }
+    
+    if ( x > n.val) {
+        if?(Node right = n.right) {
+            bst_insert(right, x);
+        } else {
+            n.right = new Node{left = Node null; right = Node null; val = x};
+        }
+    }
+
+    if ( x < n.val ) {
+        if?(Node left = n.left) {
+            bst_insert(left, x);
+        } else {
+            n.left = new Node{left = Node null; right = Node null; val = x};
+        }
+    }
+
+    return;
+}
+
+Node create_from_array(int[] arr) {
+    var root = new Node{left = Node null; right = Node null; val = arr[0]};
+    for (var i = 1; i < length(arr); i = i + 1;) {
+        bst_insert(root,arr[i]);
+    }
+    return root;
+}
+
+int program(int argc, string[]argv) {
+    var vals = new int[]{7,3,8,5,1,2};
+    inorder_traversal(create_from_array(vals));
+    return 0;
+}
+

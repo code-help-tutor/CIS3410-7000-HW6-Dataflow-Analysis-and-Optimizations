@@ -1,0 +1,80 @@
+struct Node {
+    int data; 
+    Node? next; 
+    bool hasNext
+}
+
+struct Stack {
+    Node? top; 
+    int size
+}
+
+Node createNode (int data) {
+    return new Node {data = data; next = Node null; hasNext = false};
+}
+
+Stack initializeStack() {
+    return new Stack {top = Node null; size = 0};   
+}
+
+bool isEmpty (Stack s) {
+    if (s.size == 0) {
+        return true;
+    } else {
+        return false; 
+    }
+}
+
+int pop (Stack s) {
+    if (!isEmpty(s)) {
+        var prevTop = s.top; 
+        s.top = prevTop.next; 
+        s.size = s.size - 1; 
+        return prevTop.data;
+    }
+
+    print_string("Stack is empty!");
+    return 0;
+}
+
+void push (Stack s, int val) {
+    var prevTop = s.top;
+    var n = createNode(val);
+    n.next = prevTop; 
+    s.top = n;
+    s.size = s.size + 1;
+
+    return;
+}
+
+int peek (Stack s) {
+    if (!isEmpty(s)) {
+        return s.top.data;
+    } 
+
+    print_string("Stack is empty!");
+
+    return 0;
+}
+
+
+
+int program (int argc, string[] argv) {
+
+    var s = initializeStack();
+
+    push(s, 1);
+    push(s, 2);
+    push(s, 3);
+    push(s, 4);
+
+    for (var i = 4; i > 0; i = i - 1;) {
+        var curr = pop(s);
+
+        if (curr != i) {
+            return -1;
+        }
+    }
+
+    return 0;
+}

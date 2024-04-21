@@ -1,0 +1,56 @@
+/*
+    Program which validates a BST
+*/
+
+struct Node {
+    int val;
+    Node? left;
+    Node? right
+}
+
+Node createNode(int v, Node? left, Node? right) {
+    return new Node {
+        val = v;
+        left = left;
+        right = right
+    };
+}
+
+bool isValid(Node? n, int min, int max) {
+    if? (Node node = n) {
+       if (node.val < min | node.val > max) {
+            return false;
+        } else {
+            return isValid(node.left, min, node.val) & isValid(node.right, node.val, max);
+        }
+    } else {
+      return true;
+    }
+}
+
+int program(int argc, string[] argv) {
+    var oneValid = createNode(1, Node null, Node null);
+    var threeValid = createNode(3, Node null, Node null);
+    var twoValid = createNode(2, oneValid, threeValid);
+    var eightValid = createNode(8, Node null, Node null);
+    var fiveValid = createNode(5, Node null, Node null);
+    var sevenValid = createNode(7, Node null, eightValid);
+    var sixValid = createNode(6, fiveValid, sevenValid);
+    var fourValid = createNode(4, twoValid, sixValid);
+
+
+    var oneInvalid = createNode(1, Node null, Node null);
+    var threeInvalid = createNode(3, Node null, Node null);
+    var fiveInvalid = createNode(5, Node null, Node null);
+    var twoInvalid = createNode(2, oneInvalid, fiveInvalid);
+    var eightInvalid = createNode(8, Node null, Node null);
+    var sevenInvalid = createNode(7, Node null, eightInvalid);
+    var sixInvalid = createNode(6, threeInvalid, sevenInvalid);
+    var fourInvalid = createNode(4, twoInvalid, sixInvalid);
+
+    var res = isValid(fourValid, fourValid.val, fourValid.val) & !isValid(fourInvalid, fourInvalid.val, fourInvalid.val);
+    if (res) {
+        return 1;
+    }
+    return 0;
+}

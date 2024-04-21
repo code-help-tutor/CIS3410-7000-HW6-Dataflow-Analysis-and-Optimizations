@@ -1,0 +1,72 @@
+struct Person {
+    string name;
+    int age;
+    int height;
+    int income
+}
+
+global people = new Person[]{
+    new Person{name = "Alice"; age = 25; height = 160; income = 75000},
+    new Person{name = "Bob"; age = 52; height = 192; income = 78000},
+    new Person{name = "Carol"; age = 37; height = 156; income = 100000},
+    new Person{name = "Dave"; age = 19; height = 200; income = 12000}
+};
+
+Person? reduce_to_person(Person[] people, (Person, Person?) -> Person? reducer, Person? initial_value) {
+    var out = initial_value;
+    for (var i = 0; i < length(people); i = i + 1;) {
+        out = reducer(people[i], out);
+    }
+    return out;
+}
+
+Person? youngest_reducer(Person new_person, Person? acc) {
+    if? (Person nonnull_acc = acc) {
+        if (nonnull_acc.age > new_person.age) {
+            return new_person;
+        } else {
+            return nonnull_acc;
+        }
+    } else {
+        return new_person;
+    }
+}
+
+Person? youngest(Person[] people) {
+    return reduce_to_person(people, youngest_reducer, Person null);
+}
+
+Person? oldest_reducer(Person new_person, Person? acc) {
+    if? (Person nonnull_acc = acc) {
+        if (nonnull_acc.age < new_person.age) {
+            return new_person;
+        } else {
+            return nonnull_acc;
+        }
+    } else {
+        return new_person;
+    }
+}
+
+Person? oldest(Person[] people) {
+    return reduce_to_person(people, oldest_reducer, Person null);
+}
+
+int program (int argc, string[] argv) {
+    var youngest = youngest(people);
+    var oldest = oldest(people);
+
+	if? (Person nonnull_youngest = youngest)
+	{
+		print_string("The youngest is ");
+		print_string(nonnull_youngest.name);
+	}
+
+	if? (Person nonnull_oldest = oldest)
+	{
+		print_string(" and the oldest is ");
+		print_string(nonnull_oldest.name);
+	}
+
+	return 0;
+}

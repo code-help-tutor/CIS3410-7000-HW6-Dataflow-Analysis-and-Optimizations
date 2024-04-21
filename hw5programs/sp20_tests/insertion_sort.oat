@@ -1,0 +1,94 @@
+struct LNode {
+    int val;
+    LNode? next
+}
+
+int comparator(int i1, int i2){
+    return -(i1 - i2);
+}
+
+LNode? insert(int v, LNode? sorted, (int,int) -> int comp){
+
+    if?(LNode root = sorted){
+        var curr = root;
+
+        while (true) {
+            if?(LNode next = curr.next){
+                
+                    if(comp(next.val, v) < 0){
+                        curr = next;
+                    } else {
+                    var newNode = new LNode { val = v; next = curr.next};
+                    curr.next = newNode;
+                    return sorted;
+                    }
+            } else { 
+                var newNode = new LNode { val = v; next = curr.next};
+                curr.next = newNode;
+                return sorted;
+            }
+        }
+
+    } else{
+        sorted = new LNode {val = v; next = LNode null};
+        return sorted;
+    }
+    return sorted;
+}
+
+LNode? sort(LNode? l, (int,int)-> int comp){
+
+    var sorted = LNode null;
+
+    while (true) {
+        if?(LNode ln = l){
+            var next = ln.next;
+            sorted = insert(ln.val, sorted, comp);
+            l = next;
+        } else{
+            return sorted;
+        }
+    }
+    return l;
+}
+
+
+int program (int argc, string[] argv){
+
+
+var a = new LNode { val = 4; next = LNode null};
+var b = new LNode { val = 6; next = a};
+var c = new LNode { val = 6; next = b};
+var d = new LNode { val = 56; next = c};
+var e = new LNode { val = 23; next = d};
+var f = new LNode { val = 11; next = e};
+var g = new LNode { val = 62; next = f};
+var h = new LNode { val = 573; next = g};
+var i = new LNode { val = 24; next = h};
+var j = new LNode { val = -770; next = h};
+
+
+var res = sort(j, comparator);
+
+while (true) {
+    if?(LNode curr = res){
+        while (true) {
+            if?(LNode next = curr.next){
+                if(curr.val != -770){
+                print_int(curr.val);
+                print_string("  ");
+                }
+                curr = next;
+            } else {
+             print_int(curr.val);
+            return 0;
+            }
+        }
+    } else{
+        print_int (-1);
+        return 0;
+    }
+}
+           return -1;
+    
+}

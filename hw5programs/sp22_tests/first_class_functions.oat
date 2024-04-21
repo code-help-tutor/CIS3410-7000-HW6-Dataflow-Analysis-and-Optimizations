@@ -1,0 +1,68 @@
+int[]? map ((int) -> int f, int[]? l) {
+    if? (int[] a = l) {
+        var size = length(a);
+        var new_arr = new int[size] {i -> f(a[i])};
+        return new_arr;
+    } else {
+        return int[] null;
+    }
+}
+
+int[]? filter ((int) -> bool f, int[]? l) {
+    if? (int[] a = l) {
+        var size = length(a);
+        var bool_arr = new bool[size] {i -> f(a[i])};
+        var new_size = 0;
+        for (var i = 0; i < size; i = i + 1;) {
+            if (bool_arr[i]) {
+                new_size = new_size + 1;
+            }
+        }
+        var ind = 0;
+        var new_arr = new int[new_size];
+        for (var i = 0; i < size; i = i + 1;) {
+            if (bool_arr[i]) {
+                new_arr[ind] = a[i];
+                ind = ind + 1;
+            }
+        }
+        return new_arr;
+    } else {
+        return l;
+    }
+}
+
+int fold_left ((int, int) -> int f, int acc, int[] l, int curr_indx) {
+    var size = length(l);
+    if (curr_indx == size) {
+        return acc;
+    }
+    var new_acc = f(acc, l[curr_indx]);
+    return fold_left(f, new_acc, l, curr_indx + 1);
+}
+
+int incr(int x) {
+    return x + 1;
+}
+
+bool lt_five(int x) {
+    return x < 5;
+}
+
+int sum(int acc, int v) {
+    return acc + v;
+}
+
+int program(int argc, string[] argv) {
+    var l = new int[] {1, 2, 3, 7, 8, 9};
+    var mapped_l = map(incr, l);
+    if? (int[] a = mapped_l) {
+        print_int(a[0]);
+    }
+    var filtered_l = filter(lt_five, l);
+    if? (int[] a = filtered_l) {
+        print_int(length(a));
+    }
+    print_int(fold_left(sum, 0, l, 0));
+    return 0;
+}

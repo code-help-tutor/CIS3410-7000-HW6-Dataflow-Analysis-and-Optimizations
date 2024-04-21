@@ -1,0 +1,43 @@
+struct Node {
+    int v;
+    Node? next
+}
+
+Node? reverse(Node? head) {
+    if? (Node c = head) {
+        var temp = c.next;
+        var curr = c;
+        var n = Node null;
+        curr.next = n;
+        if? (Node a = temp){
+            curr = a;
+            if? (Node prev = head) {
+                while (true) {
+                    if? (Node b = temp){
+                        curr = b;
+                        temp = curr.next;
+                        curr.next = prev;
+                        prev = curr;
+                    } else {
+                        return prev;
+                    }    
+                        
+                }
+                return prev;
+            } 
+        }
+    } 
+    return head;
+}
+
+int program(int argc, string[] argv) {
+    var n1 = new Node {v=1; next = Node null};
+    var n2 = new Node {v=2; next = n1};
+    var n3 = new Node {v=3; next = n2};
+    
+    if? (Node h = reverse(n3)){
+        return h.v;
+    } else {
+        return 0;
+    }
+}

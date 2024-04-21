@@ -1,0 +1,67 @@
+/* naive string-to-int conversion */
+int int_of_string(string s) {
+    var result = 0;
+    var chars = array_of_string(s);
+
+    for (var i = 0; i < length_of_string(s); i = i + 1;) {
+        result = result * 10;
+        /* ascii('0') == 48 */
+        result = result + chars[i] - 48;
+    }
+
+    return result;
+}
+
+/* returns true if a is a multiple of b. naive */
+bool is_multiple_of(int a, int b) {
+    for (var i = 0;; i = i + 1;) {
+        if (b * i > a) {
+            return false;
+        }
+        if (b * i == a) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/*
+   computes the general fizzbuzz of n.
+   first argument should be the length of argv
+   argv should have an unused element at index 0,
+   and then contiguous pairs of strings of integers and their replacements.
+   (e.g. pass "3 fizz 5 buzz" as command line arguments for classic fizzbuzz)
+*/
+string generalFizzBuzz(int argc, string[] argv, int n) {
+    var s = "";
+
+    for (var j = 1; j < argc; j = j + 2;) {
+        var modulo_base = argv[j];
+
+        if (is_multiple_of(n, int_of_string(modulo_base))) {
+            s = string_cat(s, argv[j + 1]);
+        }
+    }
+
+    if (length_of_string(s) == 0) {
+        return string_of_int(n);
+    } else {
+        return s;
+    }
+}
+
+int program (int argc, string[] argv) {
+    for (var i = 1; i <= 100; i = i + 1;) {
+        print_string(generalFizzBuzz(argc, argv, i));
+        print_string("\n");
+    }
+
+    /* as far as i can tell, the testing suite trims the last character
+       if it's a newline. so print an extra newline before the '0' from our
+       return gets concatenated to our stdout
+    */
+    print_string("\n");
+
+    return 0;
+}

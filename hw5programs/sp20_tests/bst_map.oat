@@ -1,0 +1,83 @@
+struct Map {
+  Node? root
+}
+
+struct Node {
+  Node? left;
+  Node? right;
+  int key;
+  string val
+}
+
+global empty = new Map { root = Node null };
+
+Node singleton(int key, string val) {
+  return new Node
+    { left = Node null
+    ; right = Node null
+    ; key = key
+    ; val = val
+    };
+}
+
+string? lookupNode(Node? n, int key) {
+  if?(Node node = n) {
+    if (node.key == key) {
+      return node.val;
+    } else if (key < node.key) {
+      return lookupNode(node.left, key);
+    } else {
+      return lookupNode(node.right, key);
+    }
+  } else {
+    return string null;
+  }
+}
+
+string? lookup(Map m, int key) {
+  return lookupNode(m.root, key);
+}
+
+void insertNode(Node n, int key, string val) {
+  if (key == n.key) {
+    n.val = val;
+    return;
+  } else if (key < n.key) {
+    if?(Node left = n.left) {
+      insertNode(left, key, val);
+    } else {
+      n.left = singleton(key, val);
+    }
+    return;
+  } else {
+    if?(Node right = n.right) {
+      insertNode(right, key, val);
+    } else {
+      n.right = singleton(key, val);
+    }
+    return;
+  }
+}
+
+void insert(Map m, int key, string val) {
+  if?(Node n = m.root) {
+    insertNode(n, key, val);
+  } else {
+    m.root = singleton(key, val);
+  }
+  return;
+}
+
+int program(int argc, string[] argv) {
+  var map = empty;
+  insert(map, 1, "hello");
+  insert(map, 5, "world");
+  insert(map, 3, "cis341!");
+  insert(map, 2, "asdf");
+
+  if?(string val = lookup(map, 3)) {
+    return length_of_string(val);
+  } else {
+    return 0;
+  }
+}

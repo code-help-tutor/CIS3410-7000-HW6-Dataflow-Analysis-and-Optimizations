@@ -1,0 +1,64 @@
+int findLargestBlock(int[][][] mat, int i, int j, int k, int maxsize)
+{
+    if (i < 0 | j < 0 | k < 0) {
+        return 0;
+    }
+
+    var d = new int[7];
+
+    d[0] = findLargestBlock(mat, i, j, k - 1, maxsize);
+    d[1] = findLargestBlock(mat, i, j - 1, k, maxsize);
+    d[2] = findLargestBlock(mat, i-1, j - 1, k, maxsize);
+    d[3] = findLargestBlock(mat, i, j - 1, k-1, maxsize);
+    d[4] = findLargestBlock(mat, i-1, j - 1, k, maxsize);
+    d[5] = findLargestBlock(mat, i-1, j , k-1, maxsize);
+    d[6] = findLargestBlock(mat, i-1, j - 1, k-1, maxsize);
+
+    var size = 0;
+    if (mat[i][j][k] == 1) {
+        var min = d[0];
+        for (var i = 1; i < 7; i = i + 1;){
+            if (min > d[i]) {
+                min = d[i];
+            }
+        }
+        size = 1 + min;
+    }
+
+    var max = 0;
+    if (maxsize > size){
+        max = maxsize;
+    } else {
+        max = size;
+    }
+    return max;
+}
+
+int[][][] getTensor(){
+    return new int[][][]
+    {new int[][]{
+        new int[]{1, 0, 1},
+        new int[]{1, 1, 1},
+        new int[]{1, 1, 0}
+        },
+     new int[][]{
+        new int[]{1, 1, 1},
+        new int[]{1, 1, 1},
+        new int[]{1, 1, 1}
+     },
+     new int[][]{
+        new int[]{0, 1, 1},
+        new int[]{0, 1, 1},
+        new int[]{1, 1, 1}
+     }
+    };
+}
+
+int program()
+{
+
+    var mat = getTensor();
+
+    print_string("The size of the largest cubical block of 1's is ");
+    return findLargestBlock(mat, 3-1, 3-1, 3-1, 0);
+}
